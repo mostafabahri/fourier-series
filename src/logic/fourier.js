@@ -142,5 +142,6 @@ function func(x){
 //  console.log(sineCoeffs)
 
 export default {
-  FourierSeriesCoeffs, math_round
+  FourierSeriesCoeffs, math_round,
+  FourierSeriesSineCoeffs
 }
