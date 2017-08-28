@@ -32,15 +32,15 @@
                     .one
                       label.radio
                         input(type="radio", value="all", v-model="mode", checked)
-                        |  all terms
+                        |  normal series
                     .two
                       label.radio
                         input(type="radio", value="sine", v-model="mode")
-                        |  sine terms
+                        |  sine series
                     .three
                       label.radio
                         input(type="radio", value="cosine", v-model="mode")
-                        |  cosine terms
+                        |  cosine series
             .field.is-horizontal
               .field-label.is-normal
                 label.label count
@@ -57,7 +57,12 @@
                   span `f(x) =`
                   span#exprRender `x^2 + x/cos(2*x)+ ln(x/3)`
               .column.is-3
-                p ` ({{low}}, {{high}})`
+                p
+                  span `(`
+                  span#lowRender `{{low}}`
+                  span `, `
+                  span#highRender `{{high}}`
+                  span `)`
             .columns
               .column
                 p `f(x) = a_0/2 + sum_(i=1)^n a_n cos(2pi/lx) + b_n sin(2pi/lx)`
@@ -81,12 +86,23 @@
         mode: "all"
       };
     },
+    methods: {
+
+    },
     watch: {
       // debounce to capture only the end result while typing
       expr: _.debounce(function () {
         let math = MathJax.Hub.getAllJax("exprRender")[0];
         MathJax.Hub.Queue(["Text", math, this.expr]);
-      }, 800)
+      }, 800),
+      low: _.debounce(function () {
+        let math = MathJax.Hub.getAllJax("lowRender")[0];
+        MathJax.Hub.Queue(["Text", math, this.low]);
+      }, 800),
+      high: _.debounce(function () {
+        let math = MathJax.Hub.getAllJax("highRender")[0];
+        MathJax.Hub.Queue(["Text", math, this.high]);
+      }, 800),
     }
   };
 </script>
