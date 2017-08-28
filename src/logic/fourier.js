@@ -1,5 +1,5 @@
 "use strict"
-const math = require("mathjs")
+import math from 'mathjs'
 const pi = math.pi
 
 
@@ -141,6 +141,6 @@ function func(x){
 //  const sineCoeffs = FourierSeriesSineCoeffs(func, -pi, pi , 10)
 //  console.log(sineCoeffs)
 
-module.exports = {
-  FourierSeriesCoeffs
+export default {
+  FourierSeriesCoeffs, math_round
 }
