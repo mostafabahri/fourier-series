@@ -2,7 +2,7 @@
   section.section
     .container
       .columns
-        .column.is-4
+        .column.is-4#properties
           .box
             h4.title.is-4 Properties
             .field.is-horizontal
@@ -48,9 +48,9 @@
                 p.control
                   input.input(type="number", v-model.number="count")
 
-        .column
+        .column#results
           .box
-            h4.title.is-4 Result
+            h4.title.is-4 Results
             .columns
               .column.is-6
                 p
@@ -67,17 +67,27 @@
 </template>
 
 <script>
+  import _ from 'lodash';
+
+  MathJax.Hub.processSectionDelay = 0;
   export default {
     name: 'my-component',
     data() {
       return {
-        xpr: 'x^2 + x/cos(2*x)+ ln(x/3)',
+        expr: 'x/cos(2*x)+ ln(x/3)',
         low: '-pi',
         high: 'pi',
         count: 3,
         mode: "all"
       };
     },
+    watch: {
+      // debounce to capture only the end result while typing
+      expr: _.debounce(function () {
+        let math = MathJax.Hub.getAllJax("exprRender")[0];
+        MathJax.Hub.Queue(["Text", math, this.expr]);
+      }, 800)
+    }
   };
 </script>
 
