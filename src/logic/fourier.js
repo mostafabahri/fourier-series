@@ -39,6 +39,8 @@ function FourierSeriesSineCoeffs(f, lower_bound = -pi, upper_bound = pi , count 
 }
 
 
+
+// for f(x) where x = x0
 function FourierSeriesValue(x, coeffs, lower_bound, upper_bound){
 
     let acc  = 0
@@ -56,7 +58,7 @@ function FourierSeriesFX(f, x, lower_bound, upper_bound, count = 3){
 }
 
 
-function definite_integrate(f, a, b, step = 0.001) {
+function definite_integrate(f, a, b, step = 0.0001) {
     let acc = 0
 
     for (let x = a; x < b; x+= step) {
@@ -128,16 +130,16 @@ function func(x){
     return x*x + x;
 }
 
- console.log(definite_integrate(func, -pi , +pi)) // ~ 4
-
-let all_coeffs = FourierSeriesCoeffs(func, -pi, pi, 5)
-let mapped_to_ml = coeffs_to_asciimath(all_coeffs, pi)
-console.log(mapped_to_ml.map( x => `(${x[0]} + ${x[1]})`)
-                        .reduce( (x, y) =>  `${x} + ${y}`))
-console.log(FourierSeriesFX(func, 3, -pi, pi, 100))
-
- const sineCoeffs = FourierSeriesSineCoeffs(func, -pi, pi , 10)
- console.log(sineCoeffs)
+//  console.log(definite_integrate(func, -pi , +pi)) // ~ 4
+//
+// let all_coeffs = FourierSeriesCoeffs(func, -pi, pi, 5)
+// let mapped_to_ml = coeffs_to_asciimath(all_coeffs, pi)
+// console.log(mapped_to_ml.map( x => `(${x[0]} + ${x[1]})`)
+//                         .reduce( (x, y) =>  `${x} + ${y}`))
+// console.log(FourierSeriesFX(func, 3, -pi, pi, 100))
+//
+//  const sineCoeffs = FourierSeriesSineCoeffs(func, -pi, pi , 10)
+//  console.log(sineCoeffs)
 
 module.exports = {
   FourierSeriesCoeffs
