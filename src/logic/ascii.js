@@ -1,7 +1,7 @@
 import math from 'mathjs'
 import Fourier from './fourier'
 
-function isValidExpression (expr) {
+function is_valid_expression (expr) {
   try {
     math.parse(expr).eval({x: 1})
     return true
@@ -11,9 +11,10 @@ function isValidExpression (expr) {
   }
 }
 
+//wrapper class for math.parse and math.eval
 class MathExpression {
   constructor (expression) {
-    if (!isValidExpression(expression)) {
+    if (!is_valid_expression(expression)) {
       throw EvalError('Invalid mathjs expression, correct it!')
     }
 
@@ -29,15 +30,6 @@ class MathExpression {
 
 }
 
-let expr = '2/3pi*x'
-
-function run_me (f, x) {
-  let inner = function (ff, xx) {
-    console.log(ff(xx))
-  }
-  inner(f, x)
-}
-
 function only_if_not_1 (x) {
   // skip when number is 1
   if (x === 1) {
@@ -47,6 +39,7 @@ function only_if_not_1 (x) {
 }
 
 function coeffs_to_asciimath (coeffs, l, mode) {
+
   let res = []
   //calculate pi/l beforehand for shorter expressions
   let pi_l = new MathExpression(`pi/${l}`).evaluate(0)
@@ -86,27 +79,26 @@ function coeffs_to_asciimath (coeffs, l, mode) {
                   0])
       }
   }
-  // math simplify can help
 
   return res
 }
 
 function FourierSeriesGeneralX (expr, low, high, count, mode = 'normal') {
 
-  const mathexp = new MathExpression(expr)
+  const math_exp = new MathExpression(expr)
   const low_eval = new MathExpression(low).evaluate(0)
   const high_eval = new MathExpression(high).evaluate(0)
-  console.log(mathexp, low_eval, high_eval)
+
   let coeffs = 0
   switch (mode) {
     case 'normal' :
-      coeffs = new Fourier.FourierSeriesCoeffs(mathexp.evaluate, low_eval, high_eval, count)
+      coeffs = new Fourier.FourierSeriesCoeffs(math_exp.evaluate, low_eval, high_eval, count)
       break
     case 'sine' :
-      coeffs = new Fourier.FourierSeriesSineCoeffs(mathexp.evaluate, low_eval, high_eval, count)
+      coeffs = new Fourier.FourierSeriesSineCoeffs(math_exp.evaluate, low_eval, high_eval, count)
       break
     case 'cosine' :
-      coeffs = new Fourier.FourierSeriesCosineCoeffs(mathexp.evaluate, low_eval, high_eval, count)
+      coeffs = new Fourier.FourierSeriesCosineCoeffs(math_exp.evaluate, low_eval, high_eval, count)
       break
   }
   return coeffs_to_asciimath(coeffs, high, mode)
@@ -122,25 +114,21 @@ function is_range_valid (low, high) {
 
 function FourierSeriesFX (expr, x, low, high, count , mode) {
   console.log(expr, x, low, high, count, mode)
-  const mathexp = new MathExpression(expr)
+  const math_exp = new MathExpression(expr)
   const low_eval = new MathExpression(low).evaluate(0)
   const high_eval = new MathExpression(high).evaluate(0)
   const x_eval = parseFloat(x)
-  console.log(x_eval, typeof x_eval, "type of x eval")
-  console.log(low_eval)
-  console.log(high_eval)
-  console.log(mathexp)
   let coeffs = 0
   switch (mode) {
     case 'normal' :
-      coeffs = new Fourier.FourierSeriesCoeffs(mathexp.evaluate, low_eval, high_eval, count)
+      coeffs = new Fourier.FourierSeriesCoeffs(math_exp.evaluate, low_eval, high_eval, count)
       console.log(coeffs)
       break
     case 'sine' :
-      coeffs = new Fourier.FourierSeriesSineCoeffs(mathexp.evaluate, low_eval, high_eval, count)
+      coeffs = new Fourier.FourierSeriesSineCoeffs(math_exp.evaluate, low_eval, high_eval, count)
       break
     case 'cosine' :
-      coeffs = new Fourier.FourierSeriesCosineCoeffs(mathexp.evaluate, low_eval, high_eval, count)
+      coeffs = new Fourier.FourierSeriesCosineCoeffs(math_exp.evaluate, low_eval, high_eval, count)
       break
   }
   return Fourier.FourierSeriesValue(x_eval, coeffs, low_eval, high_eval)
@@ -148,6 +136,7 @@ function FourierSeriesFX (expr, x, low, high, count , mode) {
 }
 export default {
   is_range_valid,
+  is_valid_expression,
   FourierSeriesGeneralX,
   FourierSeriesFX
 }
