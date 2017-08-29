@@ -45,7 +45,7 @@ function FourierSeriesCosineCoeffs (f, low = -pi, high = pi, count = 3) {
 
   let coeffs = []
 
-  let a_0 = 2 * constant_a0(f, low, high)
+  let a_0 = 2 * constant_a0(f, 0, high)
   coeffs.push({a0: math_round(a_0)})
 
   for (let n = 1; n < count; n++) {
@@ -65,10 +65,10 @@ function FourierSeriesValue (x, coeffs, low, high) {
   acc += coeffs[0].a0 / 2
   // the pi/l in cos(n*pi/lx) and sin(n*pi/lx)
   let pi_l = pi / high
-
   for (let n = 1; n < coeffs.length; n++) {
-    acc += coeffs[n].an * Math.cos(n * pi_l * x) + coeffs[n].bn * Math.sin(n * pi_l * x)
+    acc += coeffs[n].an * math.cos(n * pi_l * x) + coeffs[n].bn * math.sin(n * pi_l * x)
   }
+
   return acc
 }
 
@@ -122,5 +122,6 @@ export default {
   math_round,
   FourierSeriesCoeffs,
   FourierSeriesSineCoeffs,
-  FourierSeriesCosineCoeffs
+  FourierSeriesCosineCoeffs,
+  FourierSeriesValue
 }

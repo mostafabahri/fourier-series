@@ -121,14 +121,20 @@ function is_range_valid (low, high) {
 }
 
 function FourierSeriesFX (expr, x, low, high, count , mode) {
+  console.log(expr, x, low, high, count, mode)
   const mathexp = new MathExpression(expr)
   const low_eval = new MathExpression(low).evaluate(0)
   const high_eval = new MathExpression(high).evaluate(0)
   const x_eval = parseFloat(x)
+  console.log(x_eval, typeof x_eval, "type of x eval")
+  console.log(low_eval)
+  console.log(high_eval)
+  console.log(mathexp)
   let coeffs = 0
   switch (mode) {
     case 'normal' :
       coeffs = new Fourier.FourierSeriesCoeffs(mathexp.evaluate, low_eval, high_eval, count)
+      console.log(coeffs)
       break
     case 'sine' :
       coeffs = new Fourier.FourierSeriesSineCoeffs(mathexp.evaluate, low_eval, high_eval, count)
@@ -137,10 +143,11 @@ function FourierSeriesFX (expr, x, low, high, count , mode) {
       coeffs = new Fourier.FourierSeriesCosineCoeffs(mathexp.evaluate, low_eval, high_eval, count)
       break
   }
-  return FourierSeriesValue(x_eval, coeffs, low, high)
+  return Fourier.FourierSeriesValue(x_eval, coeffs, low_eval, high_eval)
 
 }
 export default {
   is_range_valid,
   FourierSeriesGeneralX,
+  FourierSeriesFX
 }
