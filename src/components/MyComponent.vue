@@ -83,13 +83,17 @@
     name: 'my-component',
     data() {
       return {
-        expr: 'x^2 + x',
+        expr: null,
         low: '-pi',
         high: 'pi',
         count: 3,
         mode: "normal"
       };
     },
+    mounted: function () {
+      this.expr = "x^2 + x"
+    },
+
     methods: {
       calculateAndRenderFX: function () {
         const am_list = ascii.view_wrapper(this.expr, this.low, this.high, this.count, this.mode)
@@ -97,10 +101,10 @@
           .map(x => `[${x[0]} + ${x[1]}]`)
           .reduce((x, y) => `${x} + ${y}`)
         const res = MathJax.Hub.getAllJax("asciiResult")[0];
-        console.log(string_ascii)
         MathJax.Hub.Queue(["Text", res, string_ascii]);
       }
     },
+
     watch: {
 
       // debounce to capture only the end result while typing
