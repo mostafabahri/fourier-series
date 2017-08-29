@@ -63,21 +63,25 @@
                   span `, `
                   span#highRender `{{high}}`
                   span `)`
-            //.columns
-            //  .column
-            //    p `f(x) = a_0/2 + sum_(i=1)^n a_n cos(2pi/lx) + b_n sin(2pi/lx)`
             .columns
               .column
                 p {{count}} terms of {{mode}} f(x) Fourier series :
             .columns
               .column
                 span#asciiResult ``
+            .columns(v-if="x")
+              .column
+                p and for f(x) where x = {{x}}
+                span#FXResult ``
 </template>
 
 <script>
   import _ from 'lodash';
   import ascii from '../logic/ascii'
+
   MathJax.Hub.processSectionDelay = 0;
+
+  const DEBOUNCE_WAIT  = 800
 
   export default {
     name: 'my-component',
@@ -87,7 +91,8 @@
         low: '-pi',
         high: 'pi',
         count: 3,
-        mode: "normal"
+        mode: "normal",
+        x : 6
       };
     },
     mounted: function () {
@@ -96,10 +101,12 @@
 
     methods: {
       calculateAndRenderFX: function () {
-        const am_list = ascii.view_wrapper(this.expr, this.low, this.high, this.count, this.mode)
-        const string_ascii = am_list
+        const am_list = ascii.FourierSeriesGeneralX(this.expr, this.low, this.high, this.count, this.mode)
+      console.log(am_list)
+        const string_ascii = `f(x) = ` + am_list
           .map(x => `[${x[0]} + ${x[1]}]`)
           .reduce((x, y) => `${x} + ${y}`)
+
         const res = MathJax.Hub.getAllJax("asciiResult")[0];
         MathJax.Hub.Queue(["Text", res, string_ascii]);
       }
@@ -111,10 +118,10 @@
       expr: _.debounce(function () {
         let math = MathJax.Hub.getAllJax("exprRender")[0];
         MathJax.Hub.Queue(["Text", math, this.expr]);
-        // next
+
         this.calculateAndRenderFX();
 
-      }, 800),
+      }, DEBOUNCE_WAIT),
 
       low: _.debounce(function () {
 
@@ -127,7 +134,7 @@
           MathJax.Hub.Queue(["Text", math, this.low]);
           this.calculateAndRenderFX();
         }
-      }, 800),
+      }, DEBOUNCE_WAIT),
 
       high: _.debounce(function () {
         if (!ascii.is_range_valid(this.low, this.high)) {
@@ -139,7 +146,7 @@
           MathJax.Hub.Queue(["Text", math, this.high]);
           this.calculateAndRenderFX();
         }
-      }, 800),
+      }, DEBOUNCE_WAIT),
 
       mode: function () {
         this.calculateAndRenderFX()

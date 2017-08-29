@@ -12,3 +12,5 @@ new Vue({
   template: '<App/>',
   components: { App },
 });
+
+//(SHA1:c84cdd514a35ccdcb1b1f9c28eb386ba04560f0b)
