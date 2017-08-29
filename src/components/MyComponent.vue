@@ -90,7 +90,7 @@
 
   MathJax.Hub.processSectionDelay = 0;
 
-  const DEBOUNCE_WAIT  = 800
+  const DEBOUNCE_WAIT = 800
 
   export default {
     name: 'my-component',
@@ -101,7 +101,7 @@
         high: 'pi',
         count: 3,
         mode: "normal",
-        x : null
+        x: null
       };
     },
     mounted: function () {
@@ -112,18 +112,18 @@
     methods: {
       calculateAndRenderGeneralX: function () {
         const am_list = ascii.FourierSeriesGeneralX(this.expr, this.low, this.high, this.count, this.mode)
-      console.log(am_list)
+        console.log(am_list)
         const string_ascii = `f(x) = ` + am_list
-          .map(x => `[${x[0]} + ${x[1]}]`)
-          .reduce((x, y) => `${x} + ${y}`)
+            .map(x => `[${x[0]} + ${x[1]}]`)
+            .reduce((x, y) => `${x} + ${y}`)
 
         const res = MathJax.Hub.getAllJax("asciiResult")[0];
         MathJax.Hub.Queue(["Text", res, string_ascii]);
-        if(this.x){
+        if (this.x) {
           this.calculateAndRenderFX()
         }
       },
-      calculateAndRenderFX : function () {
+      calculateAndRenderFX: function () {
         let value = ascii.FourierSeriesFX(this.expr, this.x, this.low, this.high, this.count, this.mode)
         console.log(value)
         let math = MathJax.Hub.getAllJax("FXResult")[0];
@@ -135,11 +135,15 @@
 
       // debounce to capture only the end result while typing
       expr: _.debounce(function () {
-        let math = MathJax.Hub.getAllJax("exprRender")[0];
-        MathJax.Hub.Queue(["Text", math, this.expr]);
+        if (!ascii.is_valid_expression(this.expr)) {
+          alert("f(x) expression is invalid!")
 
-        this.calculateAndRenderGeneralX();
+        } else {
+          let math = MathJax.Hub.getAllJax("exprRender")[0];
+          MathJax.Hub.Queue(["Text", math, this.expr]);
 
+          this.calculateAndRenderGeneralX();
+        }
       }, DEBOUNCE_WAIT),
 
       low: _.debounce(function () {
@@ -174,9 +178,10 @@
       count: function () {
         this.calculateAndRenderGeneralX()
       },
-      x : function () {
-        if (this.x){
-        this.calculateAndRenderFX()}
+      x: function () {
+        if (this.x) {
+          this.calculateAndRenderFX()
+        }
       }
     }
   };
