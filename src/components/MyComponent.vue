@@ -31,7 +31,7 @@
                   div.control
                     .one
                       label.radio
-                        input(type="radio", value="all", v-model="mode", checked)
+                        input(type="radio", value="normal", v-model="mode", checked)
                         |  normal series
                     .two
                       label.radio
@@ -63,46 +63,87 @@
                   span `, `
                   span#highRender `{{high}}`
                   span `)`
+            //.columns
+            //  .column
+            //    p `f(x) = a_0/2 + sum_(i=1)^n a_n cos(2pi/lx) + b_n sin(2pi/lx)`
             .columns
               .column
-                p `f(x) = a_0/2 + sum_(i=1)^n a_n cos(2pi/lx) + b_n sin(2pi/lx)`
+                p {{count}} terms of {{mode}} f(x) Fourier series :
             .columns
               .column
-                p {{count}} of {{mode}} terms of f(x) Fourier series :
+                span#asciiResult ``
 </template>
 
 <script>
   import _ from 'lodash';
-
+  import ascii from '../logic/ascii'
   MathJax.Hub.processSectionDelay = 0;
+
   export default {
     name: 'my-component',
     data() {
       return {
-        expr: 'x/cos(2*x)+ ln(x/3)',
+        expr: 'x^2 + x',
         low: '-pi',
         high: 'pi',
         count: 3,
-        mode: "all"
+        mode: "normal"
       };
     },
     methods: {
-
+      calculateAndRenderFX: function () {
+        const am_list = ascii.view_wrapper(this.expr, this.low, this.high, this.count, this.mode)
+        const string_ascii = am_list
+          .map(x => `[${x[0]} + ${x[1]}]`)
+          .reduce((x, y) => `${x} + ${y}`)
+        const res = MathJax.Hub.getAllJax("asciiResult")[0];
+        console.log(string_ascii)
+        MathJax.Hub.Queue(["Text", res, string_ascii]);
+      }
     },
     watch: {
+
       // debounce to capture only the end result while typing
       expr: _.debounce(function () {
         let math = MathJax.Hub.getAllJax("exprRender")[0];
         MathJax.Hub.Queue(["Text", math, this.expr]);
+        // next
+        this.calculateAndRenderFX();
+
       }, 800),
+
       low: _.debounce(function () {
-        let math = MathJax.Hub.getAllJax("lowRender")[0];
-        MathJax.Hub.Queue(["Text", math, this.low]);
+
+        if (!ascii.is_range_valid(this.low, this.high)) {
+          alert("Invalid range! low must be less than high")
+
+        } else {
+
+          let math = MathJax.Hub.getAllJax("lowRender")[0];
+          MathJax.Hub.Queue(["Text", math, this.low]);
+          this.calculateAndRenderFX();
+        }
       }, 800),
+
       high: _.debounce(function () {
-        let math = MathJax.Hub.getAllJax("highRender")[0];
-        MathJax.Hub.Queue(["Text", math, this.high]);
+        if (!ascii.is_range_valid(this.low, this.high)) {
+          alert("Invalid range! low must be less than high")
+
+        } else {
+
+          let math = MathJax.Hub.getAllJax("highRender")[0];
+          MathJax.Hub.Queue(["Text", math, this.high]);
+          this.calculateAndRenderFX();
+        }
       }, 800),
+
+      mode: function () {
+        this.calculateAndRenderFX()
+      },
+
+      count: function () {
+        this.calculateAndRenderFX()
+      }
     }
   };
 </script>

@@ -47,8 +47,11 @@ function only_if_not_1 (x) {
 
 function coeffs_to_asciimath (coeffs, l, mode) {
   let res = []
+  //calculate pi/l beforehand for shorter expressions
   let pi_l = new MathExpression(`pi/${l}`).evaluate(0)
+  pi_l = Fourier.math_round(pi_l)
   pi_l = only_if_not_1(pi_l)
+
   switch (mode) {
     case 'normal' :
       res.push([`${coeffs[0].a0}/2`, 0])
@@ -56,7 +59,7 @@ function coeffs_to_asciimath (coeffs, l, mode) {
         let {an, bn} = {an: coeffs[n].an, bn: coeffs[n].bn}
 
         res.push([`${an} * cos(${n}*${pi_l}x)`,
-                  `${bn} * sin(${n}*${pi_l}x)`])
+          `${bn} * sin(${n}*${pi_l}x)`])
       }
       break
     case 'sine' :
@@ -64,7 +67,7 @@ function coeffs_to_asciimath (coeffs, l, mode) {
       for (let n = 1; n < coeffs.length; n++) {
         let {bn} = {bn: coeffs[n].bn}
         res.push([0,
-                `${bn} * sin(${n}*${pi_l}x)`])
+          `${bn} * sin(${n}*${pi_l}x)`])
       }
   }
   // math simplify can help
@@ -92,7 +95,13 @@ function view_wrapper (expr, low, high, count, mode = 'normal') {
   return coeffs_to_asciimath(coeffs, high, mode)
 }
 
+function is_range_valid (low, high) {
+  const low_eval = new MathExpression(low).evaluate(0)
+  const high_eval = new MathExpression(high).evaluate(0)
 
+  return low_eval < high_eval;
+
+}
 export default {
-  view_wrapper
+  view_wrapper, is_range_valid
 }
