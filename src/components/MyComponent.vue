@@ -43,10 +43,16 @@
                         |  cosine series
             .field.is-horizontal
               .field-label.is-normal
-                label.label count
+                label.label(title="number of the series terms") count
               .field-body
                 p.control
                   input.input(type="number", v-model.number="count")
+            .field.is-horizontal
+              .field-label.is-normal
+                label.label(title="the value for f(x)") x
+              .field-body
+                p.control
+                  input.input(type="number", v-model.number="x")
 
         .column#results
           .box
@@ -69,10 +75,13 @@
             .columns
               .column
                 span#asciiResult ``
-            .columns(v-if="x")
-              .column
-                p and for f(x) where x = {{x}}
-                span#FXResult ``
+            div.f_x(v-show="x")
+              .columns
+                .column
+                  p and for f(x) where x = {{x}}
+              .columns
+                .column
+                  span#FXResult ``
 </template>
 
 <script>
@@ -92,15 +101,16 @@
         high: 'pi',
         count: 3,
         mode: "normal",
-        x : 6
+        x : null
       };
     },
     mounted: function () {
-      this.expr = "x^2 + x"
+      this.expr = "x^2 + x";
+      this.x = 2;
     },
 
     methods: {
-      calculateAndRenderFX: function () {
+      calculateAndRenderGeneralX: function () {
         const am_list = ascii.FourierSeriesGeneralX(this.expr, this.low, this.high, this.count, this.mode)
       console.log(am_list)
         const string_ascii = `f(x) = ` + am_list
@@ -109,6 +119,15 @@
 
         const res = MathJax.Hub.getAllJax("asciiResult")[0];
         MathJax.Hub.Queue(["Text", res, string_ascii]);
+        if(this.x){
+          this.calculateAndRenderFX()
+        }
+      },
+      calculateAndRenderFX : function () {
+        let value = ascii.FourierSeriesFX(this.expr, this.x, this.low, this.high, this.count, this.mode)
+        console.log(value)
+        let math = MathJax.Hub.getAllJax("FXResult")[0];
+        MathJax.Hub.Queue(["Text", math, `f(${this.x}) = ${value}`]);
       }
     },
 
@@ -119,7 +138,7 @@
         let math = MathJax.Hub.getAllJax("exprRender")[0];
         MathJax.Hub.Queue(["Text", math, this.expr]);
 
-        this.calculateAndRenderFX();
+        this.calculateAndRenderGeneralX();
 
       }, DEBOUNCE_WAIT),
 
@@ -132,7 +151,7 @@
 
           let math = MathJax.Hub.getAllJax("lowRender")[0];
           MathJax.Hub.Queue(["Text", math, this.low]);
-          this.calculateAndRenderFX();
+          this.calculateAndRenderGeneralX();
         }
       }, DEBOUNCE_WAIT),
 
@@ -144,16 +163,20 @@
 
           let math = MathJax.Hub.getAllJax("highRender")[0];
           MathJax.Hub.Queue(["Text", math, this.high]);
-          this.calculateAndRenderFX();
+          this.calculateAndRenderGeneralX();
         }
       }, DEBOUNCE_WAIT),
 
       mode: function () {
-        this.calculateAndRenderFX()
+        this.calculateAndRenderGeneralX()
       },
 
       count: function () {
-        this.calculateAndRenderFX()
+        this.calculateAndRenderGeneralX()
+      },
+      x : function () {
+        if (this.x){
+        this.calculateAndRenderFX()}
       }
     }
   };
