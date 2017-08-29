@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       title: 'Fourier Series',
-      subtitle: 'By Mostafa',
+      subtitle: 'By Mostafa Bahri',
     };
   },
 };
