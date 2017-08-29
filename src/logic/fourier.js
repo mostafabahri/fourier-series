@@ -102,22 +102,6 @@ function b_n_clause (f, n, low, high) {
       , low, high)
 }
 
-// var h = 'x*(pi-x)'
-// var n = 6
-// var l = '2pi'
-// var f = math.parse('sin(pi/2*x) -x');
-// // var g = math.parse(`${h}*sin(${n}*pi*x)`);
-
-// console.log(f.eval({x: 5}));
-
-//console.log(`1 / (${l}) * int_(${l})^(${l}) ${math.simplify(g).toString()}`)
-
-//console.log(math.simplify(f).toString())
-
-function func (x) {
-  return x * x + x
-}
-
 export default {
   math_round,
   FourierSeriesCoeffs,
