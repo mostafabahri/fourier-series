@@ -1,6 +1,7 @@
 'use strict'
 import math from 'mathjs'
 const pi = math.pi
+import definite_integrate from './integration'
 
 function math_round (x) {
   // round number up to 3 floating points
@@ -72,14 +73,14 @@ function FourierSeriesValue (x, coeffs, low, high) {
   return acc
 }
 
-function definite_integrate (f, a, b, step = 0.0001) {
-  let acc = 0
-
-  for (let x = a; x < b; x += step) {
-    acc += f(x + step / 2) * step
-  }
-  return acc
-}
+// function definite_integrate (f, a, b, step = 0.0001) {
+//   let acc = 0
+//
+//   for (let x = a; x < b; x += step) {
+//     acc += f(x + step / 2) * step
+//   }
+//   return acc
+// }
 
 function constant_a0 (f, low, high) {
 
