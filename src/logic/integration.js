@@ -37,7 +37,7 @@ function adaptive_simpsons_rule (f, a, b, eps = default_eps) {
   [fa, fb, fc] = [f(a), f(b), f(c)]
   whole = simpsons_rule(h3, fa, fb, fc)
 
-  return recursive_asr(f, a, b, eps, whole, fa, fb, fc)
+  return recursive_asr( f, a, b, eps, whole, fa, fb, fc)
 }
 
 export default adaptive_simpsons_rule
