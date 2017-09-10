@@ -41,8 +41,3 @@ function adaptive_simpsons_rule (f, a, b, eps = default_eps) {
 }
 
 export default adaptive_simpsons_rule
-//
-// console.log(adaptive_simpsons_rule((x) => {
-//   return 3 * x ** 2
-// }, -1, 5, 0.001))
-// console.log("hey")
