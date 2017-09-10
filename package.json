@@ -8,7 +8,8 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "test": "NODE_ENV=test ava"
   },
   "dependencies": {
     "bulma": "^0.5.1",
@@ -18,7 +19,9 @@
     "vue": "^2.4.2"
   },
   "devDependencies": {
+    "@ava/babel-preset-stage-4": "^1.1.0",
     "autoprefixer": "^7.1.2",
+    "ava": "^0.22.0",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^7.1.1",
@@ -70,5 +73,14 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "ava": {
+    "require": "babel-register",
+    "files": [
+      "test/**/*.js"
+    ],
+    "source": [
+      "src/**/*.js"
+    ]
+  }
 }
