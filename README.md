@@ -1,8 +1,12 @@
-# fourier_series
+# Fourier Series
 
-> A Vue.js project
+A Fourier series is a way to represent a function as the sum of simple sine waves.   
+This project implements a Fourier series summation in both numeric and symbolic forms for value `x` on function `f(x)`.   
 
-## Build Setup
+For CSS, [Bulma](http://bulma.io/) is used and for DOM manipulation [Vue.js](https://vuejs.org/).
+
+
+### Build Setup
 
 ``` bash
 # install dependencies
@@ -11,11 +15,6 @@ npm install
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+# run ava tests
+npm run test
 ```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
