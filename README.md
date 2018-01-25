@@ -1,4 +1,5 @@
 # Fourier Series
+[![CircleCI](https://circleci.com/gh/mostafabahri/fourier-series.svg?style=svg)](https://circleci.com/gh/mostafabahri/fourier-series)
 
 A Fourier series is a way to represent a function as the sum of simple sine waves.   
 This project implements a Fourier series summation in both numeric and symbolic forms for value `x` on function `f(x)`.   

@@ -85,5 +85,7 @@
     "source": [
       "src/**/*.js"
     ]
-  }
+  },
+  "homepage": "git@github.com:mostafabahri/fourier-series"
+
 }
